@@ -1,5 +1,7 @@
 package com.huatec.ventpipe.controller;
 
+import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,21 @@ public class HouseroomController {
 	@Autowired
 	private HouseroomJPA houseroomJPA;
 	
-	@GetMapping("/query")
-	public ResponseVo query(){
-		return ResponseVoUtil.success(houseroomJPA.findAll());
+	@GetMapping("/query/{type}")
+	public ResponseVo query(@PathVariable Integer type){
+//		return ResponseVoUtil.success(houseroomJPA.findAll());
+		if(type==1)
+			return ResponseVoUtil.success(houseroomJPA.findByType(type));
+		else{//房间
+			List<Houseroom> houserooms = houseroomJPA.findByType(1);
+			for(Houseroom room : houserooms){
+				Integer id = room.getHouseroomid();
+				List<Houseroom> children = houseroomJPA.findByParentid(id);
+				room.setChildren(children);
+				room.setBelong(room.getHsname());
+			}
+			return ResponseVoUtil.success(houserooms);
+		}
 	}
 	
 	@RequestMapping("/save")

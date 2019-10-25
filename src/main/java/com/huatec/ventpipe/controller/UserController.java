@@ -1,5 +1,7 @@
 package com.huatec.ventpipe.controller;
 
+import io.swagger.annotations.ApiOperation;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +24,13 @@ public class UserController {
 	private UserJPA userJPA;
 	
 	@GetMapping("/query")
+	@ApiOperation(value="用户查询接口",notes="返回用户列表数据")
 	public ResponseVo list(){
 		return ResponseVoUtil.success(userJPA.findAll());
 	}
 	
 	@RequestMapping("/save")
+	@ApiOperation(value="用户新增/修改接口",notes="有id则更新，无则新增")
 	public ResponseVo save(@RequestBody UserDto dto){
 		User user = null;
 		if(dto.getUserid()!=null){
@@ -55,6 +59,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/delete/{id}")
+	@ApiOperation(value="用户删除接口",notes="根据id，删除用户")
 	public ResponseVo delete(@PathVariable(name="id")Integer id){
 		userJPA.deleteById(id);
 		return ResponseVoUtil.success();
