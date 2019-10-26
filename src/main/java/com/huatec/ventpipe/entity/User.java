@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,8 @@ public class User {
 	private Integer userid;
 	private String loginname;
 	private String password;
+	@Transient
+	private String password2;
 	private String username;
 	private Integer usertype;
 //	private Integer customerid;
@@ -37,12 +40,12 @@ public class User {
 	@JoinColumn(name="customerid",referencedColumnName = "customerid")
 	private Customer customer;
 	
-	@Override
-	public String toString(){
-		if(customer ==null){
-			return String.format("User [ userid=%s,username=%s, pages=%s ]", userid,username,"<EMPTY>");
-		}
-		return String.format("User [ userid=%s,username=%s, telephone=%s ]", userid,username,"");
-	}
+//	@Override
+//	public String toString(){
+//		if(customer ==null){
+//			return String.format("User [ userid=%s,username=%s, pages=%s ]", userid,username,"<EMPTY>");
+//		}
+//		return String.format("User [ userid=%s,username=%s, telephone=%s ]", userid,username,"");
+//	}
 
 }

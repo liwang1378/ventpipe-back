@@ -1,10 +1,12 @@
 package com.huatec.ventpipe.controller;
 
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +20,7 @@ import com.huatec.ventpipe.utils.ResponseVoUtil;
 
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController {
 	
 	@Autowired
@@ -63,6 +66,23 @@ public class UserController {
 	public ResponseVo delete(@PathVariable(name="id")Integer id){
 		userJPA.deleteById(id);
 		return ResponseVoUtil.success();
+	}
+	
+	@PostMapping("/reset")
+	@ApiOperation(value="用户密码修改接口",notes="根据id，修改用户密码")
+	public ResponseVo reset(@RequestBody User user){
+		log.info("{}",user);
+		int id = user.getUserid();
+		if(userJPA.findById(id).isPresent()){
+			User currentUser = userJPA.findById(id).get();
+			if(user.getPassword().equals(currentUser.getPassword())){
+				currentUser.setPassword(user.getPassword2());
+				userJPA.saveAndFlush(currentUser);
+				return ResponseVoUtil.success();
+			}
+			return ResponseVoUtil.error();
+		}
+		return ResponseVoUtil.error();
 	}
 
 }

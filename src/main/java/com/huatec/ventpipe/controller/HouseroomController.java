@@ -26,7 +26,6 @@ public class HouseroomController {
 	
 	@GetMapping("/query/{type}")
 	public ResponseVo query(@PathVariable Integer type){
-//		return ResponseVoUtil.success(houseroomJPA.findAll());
 		if(type==1)
 			return ResponseVoUtil.success(houseroomJPA.findByType(type));
 		else{//房间
