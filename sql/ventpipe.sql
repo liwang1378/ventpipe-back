@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS ventpipe DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+
 drop table if exists building;
 create table building
 (
@@ -383,6 +385,23 @@ create table aircontainer_history
 )
 ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
+insert  into `building`(`uuid`,`code`,`name`,`type`,`parentuuid`,`isfile`,`customerid`,`orderseq`) values (1,NULL,'控制系统','root',NULL,NULL,NULL,'1');
 
-
-
+/*创建面包屑函数 SELECT * FROM building WHERE FIND_IN_SET(UUID, GET_PARENT_NODE(9));*/
+DELIMITER $$
+CREATE FUNCTION `ventpipe`.`get_parent_node`(rootid VARCHAR(100)) RETURNS VARCHAR(1000)
+BEGIN
+  DECLARE fid VARCHAR(100) DEFAULT '';   
+  DECLARE str VARCHAR(1000) DEFAULT rootId;     
+  WHILE rootId IS NOT NULL DO   
+    SET fid =(SELECT parentuuid FROM building WHERE UUID = rootid);   
+    IF fid IS NOT NULL THEN   
+        SET str = CONCAT(str, ',', fid);   
+        SET rootId = fid;   
+    ELSE   
+        SET rootId = fid;   
+    END IF;
+  END WHILE;
+RETURN str;
+END$$
+DELIMITER ;
