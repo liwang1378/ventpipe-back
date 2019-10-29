@@ -5,34 +5,34 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.huatec.ventpipe.entity.Building;
 
-public class TreeUtils<T> {
-	/*	
-	public static<T> List<T> createTree(List<T> list) {
-		List<T> children =  new ArrayList<T>();
-		for(T menu : list){
-			if(0 == menu.getPid()){
+
+public class TreeUtils {
+	
+	public static List<Building> createTree(List<Building> list) {
+		List<Building> children =  new ArrayList<Building>();
+		for(Building menu : list){
+			if(null == menu.getParentuuid()){
 				initChildren(menu,list);
 				children.add(menu);
 			}
 		}
-		
 		return children;
 	}
 	
-	private static<T> void initChildren(T treeNode, List<T> list) {
-		List<T> children =  new ArrayList<T>();
-		for(T node : list){
-			Integer pid = treeNode.getId();
-			
-			if(node.getPid()!=null && pid.compareTo(node.getPid())==0){
+	private static void initChildren(Building treeNode, List<Building> list) {
+		List<Building> children =  new ArrayList<Building>();
+		for(Building node : list){
+			Integer pid = treeNode.getUuid();
+			if(node.getParentuuid()!=null && pid.compareTo(node.getParentuuid())==0){
 				initChildren(node,list);
 				children.add(node);
 			}
 		}
-		Collections.sort(children, new Comparator<T>() {
-			public int compare(T o1, T o2) {
-				int i = o1.getSort() - o2.getSort();  
+		Collections.sort(children, new Comparator<Building>() {
+			public int compare(Building o1, Building o2) {
+				int i = Integer.parseInt(o1.getOrderseq()) - Integer.parseInt(o2.getOrderseq());  
                 if(i == 0){  
                     return 0;  
                 }  
@@ -40,5 +40,5 @@ public class TreeUtils<T> {
 			};
 		});
 		treeNode.setChildren(children);
-	}*/
+	}
 }

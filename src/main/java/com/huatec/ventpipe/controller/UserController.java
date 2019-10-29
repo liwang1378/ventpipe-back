@@ -32,7 +32,7 @@ public class UserController {
 		return ResponseVoUtil.success(userJPA.findAll());
 	}
 	
-	@RequestMapping("/save")
+	@PostMapping("/save")
 	@ApiOperation(value="用户新增/修改接口",notes="有id则更新，无则新增")
 	public ResponseVo save(@RequestBody UserDto dto){
 		User user = null;

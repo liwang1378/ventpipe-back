@@ -9,4 +9,5 @@ import com.huatec.ventpipe.entity.Houseroom;
 public interface HouseroomJPA extends JpaRepository<Houseroom, Integer>{
 	List<Houseroom> findByType(Integer id);
 	List<Houseroom> findByParentid(Integer pid);
+	List<Houseroom> findByParentidAndType(Integer pid, int i);
 }

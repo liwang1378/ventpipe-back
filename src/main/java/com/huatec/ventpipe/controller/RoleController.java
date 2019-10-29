@@ -1,10 +1,12 @@
 package com.huatec.ventpipe.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,11 +25,13 @@ public class RoleController {
 	private RoleJPA roleJPA;
 	
 	@GetMapping("/query")
+	@ApiOperation(value="角色查询接口",notes="返回角色列表数据")
 	public ResponseVo query(){
 		return ResponseVoUtil.success(roleJPA.findAll());
 	}
 	
-	@RequestMapping("/save")
+	@PostMapping("/save")
+	@ApiOperation(value="角色新增/修改接口",notes="有id则更新，无则新增")
 	public ResponseVo save(@RequestBody Role role){
 		log.info("{}",role);
 		roleJPA.saveAndFlush(role);
@@ -35,6 +39,7 @@ public class RoleController {
 	}
 	
 	@GetMapping("/delete/{id}")
+	@ApiOperation(value="角色删除接口",notes="根据id，删除用户")
 	public ResponseVo delete(@PathVariable Integer id){
 		roleJPA.deleteById(id);
 		return ResponseVoUtil.success();

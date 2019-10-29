@@ -32,12 +32,14 @@ public class CommandController {
 		return ResponseVoUtil.success(commandService.query(ro));
 	}
 	
-	@RequestMapping("/save")
+	@PostMapping("/save")
+	@ApiOperation(value="报错新增/修改接口",notes="有id，有则新增，否则修改")
 	public ResponseVo save(@RequestBody Command command){
 		return ResponseVoUtil.success(commandJPA.saveAndFlush(command));
 	}
 	
 	@GetMapping("/delete/{id}")
+	@ApiOperation(value="报错删除",notes="根据id，删除指定报错记录")
 	public ResponseVo delete(@PathVariable Integer id){
 		commandJPA.deleteById(id);
 		return ResponseVoUtil.success();

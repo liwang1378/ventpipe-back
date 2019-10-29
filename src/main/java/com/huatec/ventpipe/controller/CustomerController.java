@@ -1,5 +1,7 @@
 package com.huatec.ventpipe.controller;
 
+import io.swagger.annotations.ApiOperation;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ public class CustomerController {
 	private CustomerJPA customerJPA;
 	
 	@PostMapping("/alter")
+	@ApiOperation(value="客户状态变更接口",notes="根据id，变更激活状态  1. 激活  2 非激活")
 	public ResponseVo alter(@RequestBody Customer customer){
 		Optional<Customer> cust = customerJPA.findById(customer.getCustomerid());
 		if(cust.isPresent()){
