@@ -40,7 +40,7 @@ public class BuildingController {
 	@GetMapping("/createNavigator/{uuid}")
 	@ApiOperation(value="根据id,获取导航路径",notes="根据id,获取获取导航路径")
 	public ResponseVo createNavigator(@PathVariable Integer uuid){
-		return ResponseVoUtil.success();
+		return ResponseVoUtil.success(buildingJPA.createNavigator(uuid));
 	}
 	
 	@GetMapping("/queryById/{id}")

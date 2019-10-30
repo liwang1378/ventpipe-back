@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 public class ResponseVo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private boolean success;
+	private boolean success ;
 	private Integer code;
-	private String msg;
-	private Object data;
+	private String msg ;
+	private Object data ;
 }

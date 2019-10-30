@@ -7,4 +7,6 @@ import com.huatec.ventpipe.entity.User;
 
 public interface UserJPA extends JpaRepository<User, Integer>,JpaSpecificationExecutor<User> {
 
+	User findByLoginname(String loginname);
+
 }

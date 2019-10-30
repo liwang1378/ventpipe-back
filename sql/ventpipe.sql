@@ -386,6 +386,8 @@ create table aircontainer_history
 ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 insert  into `building`(`uuid`,`code`,`name`,`type`,`parentuuid`,`isfile`,`customerid`,`orderseq`) values (1,NULL,'控制系统','root',NULL,NULL,NULL,'1');
+insert into `customer` (`customerid`, `custname`, `telephone`, `period`, `activeflag`) values('1','超级管理员',NULL,'2999-09-09','1');
+insert  into `user`(`userid`,`loginname`,`password`,`username`,`usertype`,`customerid`,`roleid`,`rolecode`,`rolename`) values (1,'admin','123456','超级管理员',1,1,NULL,NULL,NULL);
 
 /*创建面包屑函数 SELECT * FROM building WHERE FIND_IN_SET(UUID, GET_PARENT_NODE(9));*/
 DELIMITER $$
