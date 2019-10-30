@@ -21,7 +21,7 @@ public class LoginInterceptor  implements HandlerInterceptor{
 			HttpServletResponse response, Object handler) throws Exception {
 		String url = request.getRequestURI();
        
-		if(url.indexOf("login")!=-1){
+		if(url.indexOf("login")!=-1 || url.indexOf("swagger")!=-1){
 			return true;
 		}
 		HttpSession session = request.getSession();
