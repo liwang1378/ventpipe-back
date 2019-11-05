@@ -12,6 +12,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.huatec.ventpipe.entity.User;
+import com.huatec.ventpipe.enumerate.ResultEnum;
 import com.huatec.ventpipe.utils.ResponseVoUtil;
 @Slf4j
 public class LoginInterceptor  implements HandlerInterceptor{
@@ -31,7 +32,7 @@ public class LoginInterceptor  implements HandlerInterceptor{
 			return true;
 		}
 		log.info("{} - 访问拒绝",url);
-		String content = JSON.toJSONString(ResponseVoUtil.error(501, "权限拒绝访问"));
+		String content = JSON.toJSONString(ResponseVoUtil.error(ResultEnum.ERR_NOPERM.getCode(),ResultEnum.ERR_NOPERM.getMsg()));
 		write(request, response, content);
 		return false;
 	}

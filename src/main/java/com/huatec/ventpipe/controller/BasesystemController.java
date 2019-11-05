@@ -1,5 +1,7 @@
 package com.huatec.ventpipe.controller;
 
+import javax.servlet.http.HttpSession;
+
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.huatec.ventpipe.dao.BasesystemJPA;
 import com.huatec.ventpipe.entity.Basesystem;
+import com.huatec.ventpipe.entity.User;
 import com.huatec.ventpipe.utils.ResponseVo;
 import com.huatec.ventpipe.utils.ResponseVoUtil;
 
@@ -24,8 +27,10 @@ public class BasesystemController {
 
 	@GetMapping("/query")
 	@ApiOperation(value="基础系统查询接口",notes="基础系统列表")
-	public ResponseVo list(){
-		return ResponseVoUtil.success(bsJPA.findAll());
+	public ResponseVo list(HttpSession session){
+		User user = (User) session.getAttribute("user_session");
+		Integer customerid = user.getCustomer().getCustomerid();
+		return ResponseVoUtil.success(bsJPA.queryByCustomerid(customerid));
 	}
 	
 	@PostMapping("/save")
@@ -42,7 +47,10 @@ public class BasesystemController {
 	}
 	
 	@GetMapping("/query/{type}")
-	public ResponseVo queryByType(@PathVariable Integer type){
-		return ResponseVoUtil.success(bsJPA.queryByType(type));
+	@ApiOperation(value="根据类型,查询所属客户的基础系统列表",notes="根据类型,查询所属客户的基础系统列表")
+	public ResponseVo queryByType(HttpSession session,@PathVariable Integer type){
+		User user = (User) session.getAttribute("user_session");
+		Integer customerid = user.getCustomer().getCustomerid();
+		return ResponseVoUtil.success(bsJPA.queryByTypeAndCustomerid(type,customerid));
 	}
 }

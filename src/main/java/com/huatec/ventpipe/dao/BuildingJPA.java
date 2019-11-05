@@ -13,9 +13,11 @@ public interface BuildingJPA extends JpaRepository<Building, Integer>,JpaSpecifi
 	Building findByCode(Integer codeId);
 	List<Building> findByCustomeridOrUuidOrderByOrderseq(Integer customerid,Integer uuid);
 	List<Building> findByParentuuid(Integer pid);
+	Building findByCodeAndTypeAndCustomerid(Integer codeId, String type,Integer customerid);
 	Building findByCodeAndType(Integer codeId, String type);
 	void deleteByUuidOrParentuuid(Integer uuid, Integer pid);
 	List<Building> findByType(String type);
 	@Query(nativeQuery=true,value="SELECT * FROM building WHERE FIND_IN_SET(UUID, GET_PARENT_NODE(:uuid))")
 	List<Building> createNavigator(@Param("uuid") Integer uuid);
+	List<Building> findByTypeAndCustomerid(String type, Integer customerid);
 }

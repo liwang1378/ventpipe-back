@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +37,13 @@ public class CommandServiceImpl implements CommandService {
 		}
 		Sort sort = new Sort(Sort.Direction.DESC,"cmdid");
 		Pageable pageable = PageRequest.of(ro.getPage(), ro.getSize(),sort);
-		Page<Command> page = commandJPA.findAll(pageable);
+		Command commandQry = new Command();
+		
+		Integer customerid= ro.getCustomerid();
+		commandQry.setCustomerid(customerid);
+		Example<Command> example = Example.of(commandQry);
+		Page<Command> page = commandJPA.findAll(example, pageable);
+//		Page<Command> page = commandJPA.findAll(pageable);
 		PageVo<Command> vo = new PageVo<Command>();
 		vo.setTotal(page.getTotalElements());
 		vo.setPage(page.getTotalPages());

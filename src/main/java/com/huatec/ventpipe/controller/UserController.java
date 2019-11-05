@@ -15,6 +15,7 @@ import com.huatec.ventpipe.dao.UserJPA;
 import com.huatec.ventpipe.dto.UserDto;
 import com.huatec.ventpipe.entity.Customer;
 import com.huatec.ventpipe.entity.User;
+import com.huatec.ventpipe.enumerate.ResultEnum;
 import com.huatec.ventpipe.utils.ResponseVo;
 import com.huatec.ventpipe.utils.ResponseVoUtil;
 
@@ -80,9 +81,9 @@ public class UserController {
 				userJPA.saveAndFlush(currentUser);
 				return ResponseVoUtil.success();
 			}
-			return ResponseVoUtil.error();
+			return ResponseVoUtil.error(ResultEnum.ERR_UNKNOWN.getCode(),ResultEnum.ERR_UNKNOWN.getMsg());
 		}
-		return ResponseVoUtil.error();
+		return ResponseVoUtil.error(ResultEnum.ERR_UNKNOWN.getCode(),ResultEnum.ERR_UNKNOWN.getMsg());
 	}
 
 }

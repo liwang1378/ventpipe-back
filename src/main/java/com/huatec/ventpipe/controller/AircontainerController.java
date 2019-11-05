@@ -1,5 +1,7 @@
 package com.huatec.ventpipe.controller;
 
+import javax.servlet.http.HttpSession;
+
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.huatec.ventpipe.dao.AircontainerJPA;
 import com.huatec.ventpipe.entity.Aircontainer;
+import com.huatec.ventpipe.entity.User;
 import com.huatec.ventpipe.utils.ResponseVo;
 import com.huatec.ventpipe.utils.ResponseVoUtil;
 
@@ -24,14 +27,18 @@ public class AircontainerController {
 	
 	@GetMapping("/query")
 	@ApiOperation(value="aircontainer查询接口",notes="aircontainer查询列表")
-	public ResponseVo list(){
-		return ResponseVoUtil.success(aircontainerJPA.findAll());
+	public ResponseVo list(HttpSession session){
+		User user = (User) session.getAttribute("user_session");
+		Integer customerid = user.getCustomer().getCustomerid();
+		return ResponseVoUtil.success(aircontainerJPA.findByCustomerid(customerid));
 	}
 	
 	@GetMapping("/queryByType/{type}")
-	@ApiOperation(value="根据设备类型,查询aircontainer接口",notes="根据设备类型,查询aircontainer列表接口")
-	public ResponseVo queryByType(@PathVariable Integer type){
-		return ResponseVoUtil.success(aircontainerJPA.findByType(type));
+	@ApiOperation(value="根据设备类型,查询所属客户下的aircontainer接口",notes="根据设备类型,查询aircontainer列表接口")
+	public ResponseVo queryByType(HttpSession session,@PathVariable Integer type){
+		User user = (User) session.getAttribute("user_session");
+		Integer customerid = user.getCustomer().getCustomerid();
+		return ResponseVoUtil.success(aircontainerJPA.findByTypeAndCustomerid(type,customerid));
 	}
 	
 	@PostMapping("/save")

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.huatec.ventpipe.dao.CustomerJPA;
 import com.huatec.ventpipe.entity.Customer;
+import com.huatec.ventpipe.enumerate.ResultEnum;
 import com.huatec.ventpipe.utils.ResponseVo;
 import com.huatec.ventpipe.utils.ResponseVoUtil;
 
@@ -32,7 +33,7 @@ public class CustomerController {
 			customerJPA.saveAndFlush(cust2);
 			return ResponseVoUtil.success();
 		}
-		return ResponseVoUtil.error();
+		return ResponseVoUtil.error(ResultEnum.ERR_UNKNOWN.getCode(),ResultEnum.ERR_UNKNOWN.getMsg());
 	}
 
 }

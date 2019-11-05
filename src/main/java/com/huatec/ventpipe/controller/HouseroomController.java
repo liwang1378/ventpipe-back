@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.huatec.ventpipe.dao.HouseroomJPA;
 import com.huatec.ventpipe.entity.Houseroom;
+import com.huatec.ventpipe.entity.User;
 import com.huatec.ventpipe.utils.ResponseVo;
 import com.huatec.ventpipe.utils.ResponseVoUtil;
 
@@ -29,11 +32,13 @@ public class HouseroomController {
 	
 	@GetMapping("/query/{type}")
 	@ApiOperation(value="楼栋/房间查询接口",notes="根据type（1 楼栋/2 房间），查询列表数据")
-	public ResponseVo query(@PathVariable Integer type){
+	public ResponseVo query(HttpSession session,@PathVariable Integer type){
+		User user = (User) session.getAttribute("user_session");
+		Integer customerid = user.getCustomer().getCustomerid();
 		if(type==1)
-			return ResponseVoUtil.success(houseroomJPA.findByType(type));
+			return ResponseVoUtil.success(houseroomJPA.findByTypeAndCustomerid(type,customerid));
 		else{//房间
-			List<Houseroom> houserooms = houseroomJPA.findByType(1);
+			List<Houseroom> houserooms = houseroomJPA.findByTypeAndCustomerid(1,customerid);
 			for(Houseroom room : houserooms){
 				Integer id = room.getHouseroomid();
 				List<Houseroom> children = houseroomJPA.findByParentid(id);

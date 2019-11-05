@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 public class QueryRo {
 	private Integer page = 0;
 	private Integer size = 10;
+	private Integer customerid;
 
 }

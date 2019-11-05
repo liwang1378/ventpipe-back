@@ -24,10 +24,10 @@ public class RoleController {
 	@Autowired
 	private RoleJPA roleJPA;
 	
-	@GetMapping("/query")
+	@GetMapping("/query/{customerid}")
 	@ApiOperation(value="角色查询接口",notes="返回角色列表数据")
-	public ResponseVo query(){
-		return ResponseVoUtil.success(roleJPA.findAll());
+	public ResponseVo query(@PathVariable Integer customerid){
+		return ResponseVoUtil.success(roleJPA.findByCustomerid(customerid));
 	}
 	
 	@PostMapping("/save")

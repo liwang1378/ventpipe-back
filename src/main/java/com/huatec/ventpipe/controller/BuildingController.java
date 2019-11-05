@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.huatec.ventpipe.dao.BuildingJPA;
 import com.huatec.ventpipe.entity.Building;
+import com.huatec.ventpipe.entity.User;
+import com.huatec.ventpipe.enumerate.ResultEnum;
 import com.huatec.ventpipe.utils.ResponseVo;
 import com.huatec.ventpipe.utils.ResponseVoUtil;
 import com.huatec.ventpipe.utils.TreeUtils;
@@ -57,10 +60,12 @@ public class BuildingController {
 	
 	@PostMapping("/queryByType")
 	@ApiOperation(value="根据type,查询所有节点",notes="根据type,查询所有节点接口")
-	public ResponseVo queryByType(@RequestBody JSONObject jsonObject){
+	public ResponseVo queryByType(HttpSession session,@RequestBody JSONObject jsonObject){
+		User user = (User) session.getAttribute("user_session");
+		Integer customerid = user.getCustomer().getCustomerid();
 		log.info("{}",jsonObject);
 		String type = jsonObject.get("type").toString();
-		return ResponseVoUtil.success(buildingJPA.findByType(type));
+		return ResponseVoUtil.success(buildingJPA.findByTypeAndCustomerid(type,customerid));
 	}
 	
 	@PostMapping("/save")
@@ -69,8 +74,10 @@ public class BuildingController {
 		log.info("{}",bd);
 		Integer codeId = bd.getCode();
 		String type = bd.getType();
-		if(buildingJPA.findByCodeAndType(codeId,type)!=null){
-			return ResponseVoUtil.error();
+		Integer customerid = bd.getCustomerid();
+		//判断是否已存在
+		if(buildingJPA.findByCodeAndTypeAndCustomerid(codeId,type,customerid)!=null){
+			return ResponseVoUtil.error(ResultEnum.ERR_EXIT.getCode(),ResultEnum.ERR_EXIT.getMsg());
 		}
 		//更新排序
 		if(bd.getCode()==null){

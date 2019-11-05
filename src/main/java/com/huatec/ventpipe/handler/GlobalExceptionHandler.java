@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.huatec.ventpipe.enumerate.ResultEnum;
 import com.huatec.ventpipe.utils.ResponseVo;
 import com.huatec.ventpipe.utils.ResponseVoUtil;
 
@@ -18,6 +19,6 @@ public class GlobalExceptionHandler {
 	public ResponseVo handle(Exception e) {
 		e.printStackTrace();
 		log.error("【系统异常】 - {}" , e.getLocalizedMessage());
-		return ResponseVoUtil.error(500, e.getMessage());
+		return ResponseVoUtil.error(ResultEnum.ERR_UNKNOWN.getCode(),ResultEnum.ERR_UNKNOWN.getMsg());
 	}
 }

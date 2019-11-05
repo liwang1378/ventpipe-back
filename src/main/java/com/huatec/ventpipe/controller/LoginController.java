@@ -1,5 +1,7 @@
 package com.huatec.ventpipe.controller;
 
+import java.text.ParseException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.huatec.ventpipe.dao.UserJPA;
 import com.huatec.ventpipe.entity.User;
+import com.huatec.ventpipe.enumerate.ResultEnum;
+import com.huatec.ventpipe.utils.DateUtils;
 import com.huatec.ventpipe.utils.ResponseVo;
 import com.huatec.ventpipe.utils.ResponseVoUtil;
 
@@ -24,16 +28,19 @@ public class LoginController {
 	private UserJPA userJPA;
 	
 	@PostMapping("/login")
-	public ResponseVo login(@RequestBody User user,HttpSession session){
+	public ResponseVo login(@RequestBody User user,HttpSession session) throws ParseException{
 		log.info("{}",user);
 		User user2 = userJPA.findByLoginname(user.getLoginname());
 		
 		if(user2==null){
-			return ResponseVoUtil.error();//用户不存在
+			return ResponseVoUtil.error(ResultEnum.UNKNOWNACCOUNT.getCode(),ResultEnum.UNKNOWNACCOUNT.getMsg());//用户不存在
 		}else if(!user2.getPassword().equals(user.getPassword())){
-			return ResponseVoUtil.error();//密码不正确
+			return ResponseVoUtil.error(ResultEnum.INCORRECTCREDENTIALS.getCode(),ResultEnum.INCORRECTCREDENTIALS.getMsg());//密码不正确
 		}else if(user2.getCustomer()!=null && user2.getCustomer().getActiveflag()==2){
-			return ResponseVoUtil.error(501, "当前账户和已被冻结，请重新激活!");
+			return ResponseVoUtil.error(ResultEnum.LOCKED.getCode(),ResultEnum.LOCKED.getMsg());
+		}else if(user2.getCustomer()!=null && DateUtils.compare(
+				user2.getCustomer().getPeriod())<0){
+			return ResponseVoUtil.error(ResultEnum.EXPIRE.getCode(),ResultEnum.EXPIRE.getMsg());
 		}
 		session.setAttribute("user_session", user2);
 		log.info("{} - {}",user2,session.getAttribute("user_session"));
