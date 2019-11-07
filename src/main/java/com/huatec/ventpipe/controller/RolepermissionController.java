@@ -32,12 +32,14 @@ public class RolepermissionController {
 	
 	@PostMapping("/save")
 	@ApiOperation(value="角色权限修改接口",notes="根据roleid，先全部删除后再新增")
-	public ResponseVo save(@RequestBody List<Rolepermission> rpList) {
+	public ResponseVo save(HttpSession session,@RequestBody List<Rolepermission> rpList) {
+		User user = (User) session.getAttribute("user_session");
 		log.info("{}",rpList);
 		if(rpList!=null && rpList.size()>0) {
 			Integer roleId = rpList.get(0).getRoleid();
 			jpa.deleteByRoleid(roleId);
 			for(Rolepermission rolepermission : rpList) {
+				rolepermission.setCustomerid(user.getCustomer().getCustomerid());
 				jpa.saveAndFlush(rolepermission);
 			}
 			return ResponseVoUtil.success();
